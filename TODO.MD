@@ -1,0 +1,11 @@
+- [ ] store connection to redis
+- [ ] connect to a specific redis
+- [ ] list all databases 
+- [ ] list object in a specific database
+- [ ] view object details
+- [ ] delete a selected objects
+- [ ] create a new object
+- [ ] modify object: 
+  - value
+  - ttl
+- [ ] flush all database
