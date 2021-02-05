@@ -11,10 +11,10 @@ func main() {
 
 	tmpl := iris.HTML("src/views", ".html")
 	app.RegisterView(tmpl)
-	app.Get("/", showForm)
+	app.Get("/", index)
 
 	app.Listen(":3000")
 }
-func showForm(ctx iris.Context) {
+func index(ctx iris.Context) {
 	ctx.View("index.html")
 }
