@@ -3,6 +3,10 @@ package redis
 type DatabaseId int
 
 type Database struct {
+	Addr     string
+	Username string
+	Password string
+	Db       int
 }
 
 type Page struct {
