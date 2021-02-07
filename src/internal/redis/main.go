@@ -1,5 +1,7 @@
 package redis
 
+import "github.com/mrflick72/redis-explorer/src/internal/connections"
+
 type DatabaseId int
 
 type Database struct {
@@ -27,11 +29,11 @@ func (object *Object) ValueFor(key string) (string, error) {
 type ObjetsId string
 
 type Repository interface {
-	GetDatabases() (*[]Database, error)
-	FlushAllDatabases() error
-	FlushDatabaseFor(id DatabaseId) error
+	GetDatabases(connectionName *connections.ConnectionName) (*[]Database, error)
+	FlushAllDatabases(connectionName *connections.ConnectionName) error
+	FlushDatabaseFor(connectionName *connections.ConnectionName, id DatabaseId) error
 
-	Save(object Object) error
-	GetObjectsFor(id DatabaseId, page int, pageSize int) (*[]Object, error)
-	DeleteObjectFor(id ObjetsId) (*Object, error)
+	Save(connectionName *connections.ConnectionName, object Object) error
+	GetObjectsFor(connectionName *connections.ConnectionName, id DatabaseId, page int, pageSize int) (*[]Object, error)
+	DeleteObjectFor(connectionName *connections.ConnectionName, id ObjetsId) (*Object, error)
 }

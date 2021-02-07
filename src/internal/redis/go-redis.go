@@ -4,29 +4,30 @@ import (
 	"context"
 	"fmt"
 	go_redis "github.com/go-redis/redis/v8"
+	"github.com/mrflick72/redis-explorer/src/internal/connections"
 )
 
 type GoRedisRepository struct {
 }
 
-func (repository *GoRedisRepository) GetDatabases() (*[]Database, error) {
+func (repository *GoRedisRepository) GetDatabases(connectionName *connections.ConnectionName) (*[]Database, error) {
 	panic("tobe defined")
 }
 
-func (repository *GoRedisRepository) FlushAllDatabases() error {
+func (repository *GoRedisRepository) FlushAllDatabases(connectionName *connections.ConnectionName) error {
 	panic("tobe defined")
 }
 
-func (repository *GoRedisRepository) FlushDatabaseFor(id DatabaseId) error {
+func (repository *GoRedisRepository) FlushDatabaseFor(connectionName *connections.ConnectionName, id DatabaseId) error {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) Save(object Object) error {
+func (repository *GoRedisRepository) Save(connectionName *connections.ConnectionName, object Object) error {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) GetObjectsFor(id DatabaseId, page int, pageSize int) (*[]Object, error) {
+func (repository *GoRedisRepository) GetObjectsFor(connectionName *connections.ConnectionName, id DatabaseId, page int, pageSize int) (*[]Object, error) {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) DeleteObjectFor(id ObjetsId) (*Object, error) {
+func (repository *GoRedisRepository) DeleteObjectFor(connectionName *connections.ConnectionName, id ObjetsId) (*Object, error) {
 	panic("tobe defined")
 }
 
