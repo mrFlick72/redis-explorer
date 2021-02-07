@@ -2,15 +2,11 @@ provider "aws" {}
 
 resource "aws_dynamodb_table" "redis-connections-dynamodb-table" {
   name = "RedisExplorerConnections"
+  billing_mode = "PAY_PER_REQUEST"
   hash_key = "ConnectionName"
 
   attribute {
-    name = "Username"
-    type = "S"
-  }
-
-  attribute {
-    name = "Password"
+    name = "ConnectionName"
     type = "S"
   }
 
