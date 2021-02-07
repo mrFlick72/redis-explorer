@@ -7,20 +7,15 @@ import (
 	"testing"
 )
 
-func TestStoreAConnection(t *testing.T) {
+func TestStoreAConnectionOnDynamoDB(t *testing.T) {
 	repository := repository()
 
-	err := repository.StoreConnection(&Connection{
-		Name:        "Test",
-		HostAndPort: "",
-		Username:    "",
-		Password:    "",
-	})
+	err := repository.StoreConnection(aConnection())
 
 	assert.Nil(t, err)
 }
 
-func TestGetConnectionForConnectionName(t *testing.T) {
+func TestGetConnectionForConnectionNameOnDynamoDB(t *testing.T) {
 	repository := repository()
 	connection, err := repository.GetConnectionFor("Test")
 
@@ -33,20 +28,24 @@ func TestGetConnectionForConnectionName(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestGetConnections(t *testing.T) {
+func TestGetConnectionsOnDynamoDB(t *testing.T) {
 	repository := repository()
 	connections, err := repository.GetConnections()
-	connection := Connection{
+	connection := aConnection()
+	expected := make([]Connection, 1)
+	expected = append(expected, *connection)
+
+	assert.Equal(t, connections, &expected)
+	assert.Nil(t, err)
+}
+
+func aConnection() *Connection {
+	return &Connection{
 		Name:        "Test",
 		HostAndPort: "",
 		Username:    "",
 		Password:    "",
 	}
-	expected := make([]Connection, 1)
-	expected = append(expected, connection)
-
-	assert.Equal(t, connections, &expected)
-	assert.Nil(t, err)
 }
 
 func repository() DynamoDbRepository {

@@ -8,6 +8,7 @@ import (
 )
 
 type GoRedisRepository struct {
+	connectionsRepository *connections.Repository
 }
 
 func (repository *GoRedisRepository) GetDatabases(connectionName *connections.ConnectionName) (*[]Database, error) {
