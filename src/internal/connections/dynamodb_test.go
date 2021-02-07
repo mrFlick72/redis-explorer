@@ -12,6 +12,8 @@ func TestStoreAConnection(t *testing.T) {
 
 	err := repository.StoreConnection(&Connection{
 		Name:     "Test",
+		Host:     "",
+		Port:     0,
 		Username: "",
 		Password: "",
 	})

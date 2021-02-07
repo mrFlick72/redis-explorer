@@ -2,6 +2,7 @@ package connections
 
 import (
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
@@ -21,7 +22,7 @@ func (r *DynamoDbRepository) StoreConnection(connection *Connection) error {
 
 	response, err := r.Client.PutItem(&dynamodb.PutItemInput{
 		Item:      item,
-		TableName: &r.TableName,
+		TableName: aws.String(r.TableName),
 	})
 	fmt.Printf("response %v", response)
 
