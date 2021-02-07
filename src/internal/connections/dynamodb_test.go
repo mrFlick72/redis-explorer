@@ -11,13 +11,25 @@ func TestStoreAConnection(t *testing.T) {
 	repository := repository()
 
 	err := repository.StoreConnection(&Connection{
-		Name:     "Test",
-		Host:     "",
-		Port:     0,
-		Username: "",
-		Password: "",
+		Name:        "Test",
+		HostAndPort: "",
+		Username:    "",
+		Password:    "",
 	})
 
+	assert.Nil(t, err)
+}
+
+func TestGetConnectionForConnectionName(t *testing.T) {
+	repository := repository()
+	connection, err := repository.GetConnectionFor("Test")
+
+	assert.Equal(t, connection, &Connection{
+		Name:        "Test",
+		HostAndPort: "",
+		Username:    "",
+		Password:    "",
+	})
 	assert.Nil(t, err)
 }
 

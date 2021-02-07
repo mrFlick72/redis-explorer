@@ -6,16 +6,14 @@ type Repository interface {
 	StoreConnection(connection *Connection) error
 }
 
-type ConnectionName string
-type Host string
-type Port int16
-type Username string
-type Password string
+type ConnectionName = string
+type HostAndPort = string
+type Username = string
+type Password = string
 
 type Connection struct {
-	Name     ConnectionName `json:"ConnectionName"`
-	Host     Host           `json:",omitempty"`
-	Port     Port
-	Username Username `json:",omitempty"`
-	Password Password `json:",omitempty"`
+	Name        ConnectionName `json:"ConnectionName"`
+	HostAndPort HostAndPort    `json:",omitempty"`
+	Username    Username       `json:",omitempty"`
+	Password    Password       `json:",omitempty"`
 }

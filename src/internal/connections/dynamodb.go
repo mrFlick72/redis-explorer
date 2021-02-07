@@ -28,3 +28,34 @@ func (r *DynamoDbRepository) StoreConnection(connection *Connection) error {
 
 	return err
 }
+
+func (r *DynamoDbRepository) GetConnectionFor(name ConnectionName) (*Connection, error) {
+	item, err := r.Client.GetItem(&dynamodb.GetItemInput{
+		Key: map[string]*dynamodb.AttributeValue{
+			"ConnectionName": {
+				S: aws.String(name),
+			},
+		},
+		TableName: aws.String(r.TableName),
+	})
+	if err != nil {
+		fmt.Sprintf("err: %v", err)
+		return nil, err
+	}
+	itemMap := item.Item
+	return &Connection{
+		Name:        *itemMap["ConnectionName"].S,
+		HostAndPort: itemStringValueFor(itemMap["HostAndPort"]),
+		Username:    itemStringValueFor(itemMap["Username"]),
+		Password:    itemStringValueFor(itemMap["Password"]),
+	}, nil
+}
+func (r *DynamoDbRepository) GetConnections() (*[]Connection, error) { panic("TODO") }
+
+func itemStringValueFor(itemMap *dynamodb.AttributeValue) string {
+	if itemMap == nil {
+		return ""
+	} else {
+		return *itemMap.S
+	}
+}
