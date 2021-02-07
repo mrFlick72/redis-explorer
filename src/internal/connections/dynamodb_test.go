@@ -33,6 +33,22 @@ func TestGetConnectionForConnectionName(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestGetConnections(t *testing.T) {
+	repository := repository()
+	connections, err := repository.GetConnections()
+	connection := Connection{
+		Name:        "Test",
+		HostAndPort: "",
+		Username:    "",
+		Password:    "",
+	}
+	expected := make([]Connection, 1)
+	expected = append(expected, connection)
+
+	assert.Equal(t, connections, &expected)
+	assert.Nil(t, err)
+}
+
 func repository() DynamoDbRepository {
 	return DynamoDbRepository{
 		Client:    client(),
