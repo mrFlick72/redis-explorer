@@ -1,8 +1,8 @@
 provider "aws" {}
 
 resource "aws_dynamodb_table" "redis-connections-dynamodb-table" {
-  name           = "RedisExplorerConnections"
-  hash_key       = "ConnectionName"
+  name = "RedisExplorerConnections"
+  hash_key = "ConnectionName"
 
   attribute {
     name = "Username"
@@ -15,7 +15,7 @@ resource "aws_dynamodb_table" "redis-connections-dynamodb-table" {
   }
 
   tags = {
-    Name        = "RedisExplorerConnections"
+    Name = "RedisExplorerConnections"
     environment = var.tags_environment
     scope = var.tags_scope
     role = var.tags_role
