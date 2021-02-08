@@ -30,6 +30,10 @@ func (r *InMemoryCachedRepository) GetConnectionFor(name ConnectionName) (*Conne
 		return &connection, nil
 	} else {
 		connection, err := r.delegate.GetConnectionFor(name)
+		if err != nil {
+			return nil, err
+		}
+
 		duration, err := time.ParseDuration(r.ttl)
 		r.cacheManager.Set(connection.Name, *connection, duration)
 
