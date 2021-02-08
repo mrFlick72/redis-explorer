@@ -13,6 +13,7 @@ func TestStoreAConnectionOnInMemoryCachedRepository(t *testing.T) {
 	delegate := new(MockedDelegateObject)
 	repo := InMemoryCachedRepository{delegate: delegate,
 		cacheManager: cache,
+		ttl:          "5m",
 	}
 	connection := aConnection()
 	delegate.On("StoreConnection", connection).Return(nil)
@@ -25,7 +26,20 @@ func TestStoreAConnectionOnInMemoryCachedRepository(t *testing.T) {
 }
 
 func TestGetConnectionForConnectionNameOnInMemoryCachedRepository(t *testing.T) {
+	cache := cache.New(5*time.Minute, 10*time.Minute)
+	delegate := new(MockedDelegateObject)
+	repo := InMemoryCachedRepository{delegate: delegate,
+		cacheManager: cache,
+		ttl:          "5m",
+	}
 
+	connection := aConnection()
+	delegate.On("GetConnectionFor", "Test").Return(connection, nil)
+
+	actual, err := repo.GetConnectionFor("Test")
+
+	assert.NotNil(t, actual)
+	assert.Nil(t, err)
 }
 
 func TestGetConnectionsOnInMemoryCachedRepository(t *testing.T) {

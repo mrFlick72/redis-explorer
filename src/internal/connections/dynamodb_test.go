@@ -19,12 +19,7 @@ func TestGetConnectionForConnectionNameOnDynamoDB(t *testing.T) {
 	repository := repository()
 	connection, err := repository.GetConnectionFor("Test")
 
-	assert.Equal(t, connection, &Connection{
-		Name:        "Test",
-		HostAndPort: "",
-		Username:    "",
-		Password:    "",
-	})
+	assert.Equal(t, connection, aConnection())
 	assert.Nil(t, err)
 }
 

@@ -24,7 +24,17 @@ func (r *InMemoryCachedRepository) StoreConnection(connection *Connection) error
 }
 
 func (r *InMemoryCachedRepository) GetConnectionFor(name ConnectionName) (*Connection, error) {
-	panic("TODO")
+	element, found := r.cacheManager.Get(name)
+	if found {
+		connection := element.(Connection)
+		return &connection, nil
+	} else {
+		connection, err := r.delegate.GetConnectionFor(name)
+		duration, err := time.ParseDuration(r.ttl)
+		r.cacheManager.Set(connection.Name, *connection, duration)
+
+		return connection, err
+	}
 }
 
 func (r *InMemoryCachedRepository) GetConnections() (*[]Connection, error) {
