@@ -29,6 +29,9 @@ func (object *Object) ValueFor(key string) (string, error) {
 type ObjetsId string
 
 type Repository interface {
+	ConnectTo(connectionName *connections.ConnectionName) error
+	DisconnectFrom(connectionName *connections.ConnectionName) error
+
 	GetDatabases(connectionName *connections.ConnectionName) (*[]Database, error)
 	FlushAllDatabases(connectionName *connections.ConnectionName) error
 	FlushDatabaseFor(connectionName *connections.ConnectionName, id DatabaseId) error
