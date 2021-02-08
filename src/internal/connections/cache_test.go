@@ -43,7 +43,22 @@ func TestGetConnectionForConnectionNameOnInMemoryCachedRepository(t *testing.T) 
 }
 
 func TestGetConnectionsOnInMemoryCachedRepository(t *testing.T) {
+	cache := cache.New(5*time.Minute, 10*time.Minute)
+	delegate := new(MockedDelegateObject)
+	repo := InMemoryCachedRepository{delegate: delegate,
+		cacheManager: cache,
+		ttl:          "5m",
+	}
 
+	connections := make([]Connection, 1)
+	connection := aConnection()
+	connections = append(connections, *connection)
+	delegate.On("GetConnections").Return(&connections, nil)
+
+	actual, err := repo.GetConnections()
+
+	assert.Equal(t, connections, *actual)
+	assert.Nil(t, err)
 }
 
 type MockedDelegateObject struct {

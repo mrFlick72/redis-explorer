@@ -42,5 +42,5 @@ func (r *InMemoryCachedRepository) GetConnectionFor(name ConnectionName) (*Conne
 }
 
 func (r *InMemoryCachedRepository) GetConnections() (*[]Connection, error) {
-	panic("TODO")
+	return r.delegate.GetConnections()
 }

@@ -30,7 +30,7 @@ func TestGetConnectionsOnDynamoDB(t *testing.T) {
 	expected := make([]Connection, 1)
 	expected = append(expected, *connection)
 
-	assert.Equal(t, connections, &expected)
+	assert.Equal(t, &expected, connections)
 	assert.Nil(t, err)
 }
 
