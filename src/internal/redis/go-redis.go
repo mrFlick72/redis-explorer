@@ -8,27 +8,35 @@ import (
 )
 
 type GoRedisRepository struct {
-	connectionsRepository *connections.Repository
+	connectionsRepository connections.Repository
 }
 
-func (repository *GoRedisRepository) GetDatabases(connectionName *connections.ConnectionName) (*[]Database, error) {
-	panic("tobe defined")
-}
-
-func (repository *GoRedisRepository) FlushAllDatabases(connectionName *connections.ConnectionName) error {
+func (repository *GoRedisRepository) ConnectTo(connectionName connections.ConnectionName) error {
 	panic("tobe defined")
 }
 
-func (repository *GoRedisRepository) FlushDatabaseFor(connectionName *connections.ConnectionName, id DatabaseId) error {
+func (repository *GoRedisRepository) DisconnectFrom(connectionName connections.ConnectionName) error {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) Save(connectionName *connections.ConnectionName, object Object) error {
+
+func (repository *GoRedisRepository) GetDatabases(connectionName connections.ConnectionName) (*[]Database, error) {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) GetObjectsFor(connectionName *connections.ConnectionName, id DatabaseId, page int, pageSize int) (*[]Object, error) {
+
+func (repository *GoRedisRepository) FlushAllDatabases(connectionName connections.ConnectionName) error {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) DeleteObjectFor(connectionName *connections.ConnectionName, id ObjetsId) (*Object, error) {
+
+func (repository *GoRedisRepository) FlushDatabaseFor(connectionName connections.ConnectionName, id DatabaseId) error {
+	panic("tobe defined")
+}
+func (repository *GoRedisRepository) Save(connectionName connections.ConnectionName, object Object) error {
+	panic("tobe defined")
+}
+func (repository *GoRedisRepository) GetObjectsFor(connectionName connections.ConnectionName, id DatabaseId, page int, pageSize int) (*[]Object, error) {
+	panic("tobe defined")
+}
+func (repository *GoRedisRepository) DeleteObjectFor(connectionName connections.ConnectionName, id ObjetsId) (*Object, error) {
 	panic("tobe defined")
 }
 
