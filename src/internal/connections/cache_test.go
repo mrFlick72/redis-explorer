@@ -15,9 +15,9 @@ func TestStoreAConnectionOnInMemoryCachedRepository(t *testing.T) {
 		Repo: delegate,
 	}
 
-	repo := InMemoryCachedRepository{delegate: &delegateWrapper,
-		cacheManager: cache,
-		ttl:          "5m",
+	repo := InMemoryCachedRepository{Delegate: &delegateWrapper,
+		CacheManager: cache,
+		Ttl:          "5m",
 	}
 	connection := aConnection()
 	delegate.On("StoreConnection", connection).Return(nil)
@@ -35,9 +35,9 @@ func TestGetConnectionForConnectionNameOnInMemoryCachedRepository(t *testing.T) 
 	delegateWrapper := Repository{
 		Repo: delegate,
 	}
-	repo := InMemoryCachedRepository{delegate: &delegateWrapper,
-		cacheManager: cache,
-		ttl:          "5m",
+	repo := InMemoryCachedRepository{Delegate: &delegateWrapper,
+		CacheManager: cache,
+		Ttl:          "5m",
 	}
 
 	connection := aConnection()
@@ -55,12 +55,12 @@ func TestGetConnectionsOnInMemoryCachedRepository(t *testing.T) {
 	delegateWrapper := Repository{
 		Repo: delegate,
 	}
-	repo := InMemoryCachedRepository{delegate: &delegateWrapper,
-		cacheManager: cache,
-		ttl:          "5m",
+	repo := InMemoryCachedRepository{Delegate: &delegateWrapper,
+		CacheManager: cache,
+		Ttl:          "5m",
 	}
 
-	connections := make([]Connection, 1)
+	connections := make([]Connection, 0)
 	connection := aConnection()
 	connections = append(connections, *connection)
 	delegate.On("GetConnections").Return(&connections, nil)

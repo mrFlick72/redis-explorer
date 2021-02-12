@@ -27,7 +27,7 @@ func TestGetConnectionsOnDynamoDB(t *testing.T) {
 	repository := repository()
 	connections, err := repository.GetConnections()
 	connection := aConnection()
-	expected := make([]Connection, 1)
+	expected := make([]Connection, 0)
 	expected = append(expected, *connection)
 
 	assert.Equal(t, &expected, connections)

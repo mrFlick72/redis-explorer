@@ -41,7 +41,7 @@ func (r *DynamoDbRepository) GetConnectionFor(name ConnectionName) (*Connection,
 }
 
 func (r *DynamoDbRepository) GetConnections() (*[]Connection, error) {
-	connections := make([]Connection, 1)
+	connections := make([]Connection, 0)
 
 	items, err := r.Client.Scan(&dynamodb.ScanInput{
 		TableName: aws.String(r.TableName),
