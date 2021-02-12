@@ -1,7 +1,6 @@
 package connections
 
 import (
-	"fmt"
 	"github.com/patrickmn/go-cache"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -13,11 +12,8 @@ func TestStoreAConnectionOnInMemoryCachedRepository(t *testing.T) {
 	cache := cache.New(5*time.Minute, 10*time.Minute)
 	delegate := new(MockedDelegateObject)
 	delegateWrapper := Repository{
-		Repo:  delegate,
-		Repo2: delegate,
+		Repo: delegate,
 	}
-	fmt.Printf("r.delegate.Repo: %v", &delegateWrapper.Repo)
-	fmt.Printf("r.delegate.Repo: %v", &delegateWrapper.Repo2)
 
 	repo := InMemoryCachedRepository{delegate: &delegateWrapper,
 		cacheManager: cache,
