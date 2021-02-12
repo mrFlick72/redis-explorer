@@ -11,7 +11,10 @@ import (
 func TestStoreAConnectionOnInMemoryCachedRepository(t *testing.T) {
 	cache := cache.New(5*time.Minute, 10*time.Minute)
 	delegate := new(MockedDelegateObject)
-	repo := InMemoryCachedRepository{delegate: delegate,
+	delegateWrapper := Repository{
+		repo: delegate,
+	}
+	repo := InMemoryCachedRepository{delegate: &delegateWrapper,
 		cacheManager: cache,
 		ttl:          "5m",
 	}
@@ -28,7 +31,10 @@ func TestStoreAConnectionOnInMemoryCachedRepository(t *testing.T) {
 func TestGetConnectionForConnectionNameOnInMemoryCachedRepository(t *testing.T) {
 	cache := cache.New(5*time.Minute, 10*time.Minute)
 	delegate := new(MockedDelegateObject)
-	repo := InMemoryCachedRepository{delegate: delegate,
+	delegateWrapper := Repository{
+		repo: delegate,
+	}
+	repo := InMemoryCachedRepository{delegate: &delegateWrapper,
 		cacheManager: cache,
 		ttl:          "5m",
 	}
@@ -45,7 +51,10 @@ func TestGetConnectionForConnectionNameOnInMemoryCachedRepository(t *testing.T) 
 func TestGetConnectionsOnInMemoryCachedRepository(t *testing.T) {
 	cache := cache.New(5*time.Minute, 10*time.Minute)
 	delegate := new(MockedDelegateObject)
-	repo := InMemoryCachedRepository{delegate: delegate,
+	delegateWrapper := Repository{
+		repo: delegate,
+	}
+	repo := InMemoryCachedRepository{delegate: &delegateWrapper,
 		cacheManager: cache,
 		ttl:          "5m",
 	}

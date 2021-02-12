@@ -1,6 +1,10 @@
 package connections
 
-type Repository interface {
+type Repository struct {
+	repo RepositoryOps
+}
+
+type RepositoryOps interface {
 	GetConnectionFor(name ConnectionName) (*Connection, error)
 	GetConnections() (*[]Connection, error)
 	StoreConnection(connection *Connection) error
