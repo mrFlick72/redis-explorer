@@ -1,6 +1,7 @@
 package connections
 
 import (
+	"fmt"
 	"github.com/patrickmn/go-cache"
 	"time"
 )
@@ -12,6 +13,8 @@ type InMemoryCachedRepository struct {
 }
 
 func repositoryFor(r *InMemoryCachedRepository) RepositoryOperations {
+	fmt.Printf("r.delegate.Repo: %v", &r.delegate.Repo)
+	fmt.Printf("r.delegate.Repo: %v", &r.delegate.Repo2)
 	return r.delegate.Repo
 }
 
