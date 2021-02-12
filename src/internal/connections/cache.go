@@ -11,7 +11,7 @@ type InMemoryCachedRepository struct {
 	ttl          string
 }
 
-func repositoryFor(r *InMemoryCachedRepository) RepositoryOps {
+func repositoryFor(r *InMemoryCachedRepository) RepositoryOperations {
 	return r.delegate.repo
 }
 
