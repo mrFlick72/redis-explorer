@@ -20,7 +20,7 @@ func ConfigureConnectionsRepository() *connections.Repository {
 	cache := cache.New(5*time.Minute, 10*time.Minute)
 
 	dynamoDbRepository := connections.Repository{
-		Repo: &connections.DynamoDbRepository{
+		Operations: &connections.DynamoDbRepository{
 			TableName: "RedisExplorerConnections",
 			Client:    dynamoDbClient(),
 		}}
@@ -31,7 +31,7 @@ func ConfigureConnectionsRepository() *connections.Repository {
 		Ttl:          "1m",
 	}
 	return &connections.Repository{
-		Repo: &cachedRepository,
+		Operations: &cachedRepository,
 	}
 }
 

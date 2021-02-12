@@ -1,7 +1,7 @@
 package connections
 
 type Repository struct {
-	Repo RepositoryOperations
+	Operations RepositoryOperations
 }
 
 type RepositoryOperations interface {

@@ -12,7 +12,7 @@ type InMemoryCachedRepository struct {
 }
 
 func repositoryFor(r *InMemoryCachedRepository) RepositoryOperations {
-	return r.Delegate.Repo
+	return r.Delegate.Operations
 }
 
 func (r *InMemoryCachedRepository) StoreConnection(connection *Connection) error {

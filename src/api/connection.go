@@ -1,6 +1,8 @@
 package api
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/mrflick72/redis-explorer/src/internal/connections"
 )
@@ -12,20 +14,37 @@ type ConnectionEndpoints struct {
 func (endpoint *ConnectionEndpoints) RegisterEndpoint(application *iris.Application) {
 	application.Get("/connections", endpoint.getConnectionsEndpoint)
 	application.Get("/connections/{id}", endpoint.getConnectionForEndpoint)
+	application.Put("/connections", endpoint.storeConnectionForEndpoint)
+}
+
+func (endpoint *ConnectionEndpoints) storeConnectionForEndpoint(ctx iris.Context) {
+	body, err := ctx.GetBody()
+	if err == nil {
+		connection := connections.Connection{}
+		json.Unmarshal(body, &connection)
+		fmt.Printf("connection: %v\n", connection)
+		endpoint.Repo.Operations.StoreConnection(&connection)
+		ctx.StatusCode(iris.StatusNoContent)
+	} else {
+		fmt.Printf("err: %v\n", err)
+		ctx.StatusCode(iris.StatusInternalServerError)
+	}
+
 }
 
 func (endpoint *ConnectionEndpoints) getConnectionsEndpoint(ctx iris.Context) {
-	find, _ := (*endpoint.Repo).Repo.GetConnections()
+	find, _ := (*endpoint.Repo).Operations.GetConnections()
 	ctx.JSON(find)
 	ctx.StatusCode(iris.StatusOK)
 }
 
 func (endpoint *ConnectionEndpoints) getConnectionForEndpoint(ctx iris.Context) {
 	id := urlParam(ctx, "id", "")
-	find, _ := (*endpoint.Repo).Repo.GetConnectionFor(id)
+	find, _ := (*endpoint.Repo).Operations.GetConnectionFor(id)
 	ctx.JSON(find)
 	ctx.StatusCode(iris.StatusOK)
 }
+
 func urlParam(ctx iris.Context, paramName string, defaultValue string) string {
 	lang := ctx.URLParam(paramName)
 	if &lang == nil {

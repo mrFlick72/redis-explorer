@@ -9,7 +9,7 @@ import (
 
 func TestGoRedisRepository_ConnectTo(t *testing.T) {
 	delegate := new(MockedDelegateObject)
-	delegateWrapper := connections.Repository{Repo: delegate}
+	delegateWrapper := connections.Repository{Operations: delegate}
 
 	repository := GoRedisRepository{
 		connectionsRepository: &delegateWrapper,
