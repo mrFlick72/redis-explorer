@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/mrflick72/redis-explorer/src/internal/connections"
 )
@@ -22,14 +21,11 @@ func (endpoint *ConnectionEndpoints) storeConnectionForEndpoint(ctx iris.Context
 	if err == nil {
 		connection := connections.Connection{}
 		json.Unmarshal(body, &connection)
-		fmt.Printf("connection: %v\n", connection)
 		endpoint.Repo.Operations.StoreConnection(&connection)
 		ctx.StatusCode(iris.StatusNoContent)
 	} else {
-		fmt.Printf("err: %v\n", err)
 		ctx.StatusCode(iris.StatusInternalServerError)
 	}
-
 }
 
 func (endpoint *ConnectionEndpoints) getConnectionsEndpoint(ctx iris.Context) {
