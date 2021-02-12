@@ -36,6 +36,7 @@ func TestGetConnectionsOnDynamoDB(t *testing.T) {
 
 func aConnection() *Connection {
 	return &Connection{
+		Id:          "Test",
 		Name:        "Test",
 		HostAndPort: "",
 		Username:    "",

@@ -11,7 +11,7 @@ type ConnectionEndpoints struct {
 
 func (endpoint *ConnectionEndpoints) RegisterEndpoint(application *iris.Application) {
 	application.Get("/connections", endpoint.getConnectionsEndpoint)
-	application.Get("/connections/{name}", endpoint.getConnectionForEndpoint)
+	application.Get("/connections/{id}", endpoint.getConnectionForEndpoint)
 }
 
 func (endpoint *ConnectionEndpoints) getConnectionsEndpoint(ctx iris.Context) {
@@ -21,8 +21,8 @@ func (endpoint *ConnectionEndpoints) getConnectionsEndpoint(ctx iris.Context) {
 }
 
 func (endpoint *ConnectionEndpoints) getConnectionForEndpoint(ctx iris.Context) {
-	param := urlParam(ctx, "name", "")
-	find, _ := (*endpoint.Repo).Repo.GetConnectionFor(param)
+	id := urlParam(ctx, "id", "")
+	find, _ := (*endpoint.Repo).Repo.GetConnectionFor(id)
 	ctx.JSON(find)
 	ctx.StatusCode(iris.StatusOK)
 }

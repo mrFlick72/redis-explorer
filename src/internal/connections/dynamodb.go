@@ -24,11 +24,11 @@ func (r *DynamoDbRepository) StoreConnection(connection *Connection) error {
 	return err
 }
 
-func (r *DynamoDbRepository) GetConnectionFor(name ConnectionName) (*Connection, error) {
+func (r *DynamoDbRepository) GetConnectionFor(id ConnectionId) (*Connection, error) {
 	item, err := r.Client.GetItem(&dynamodb.GetItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
-			"ConnectionName": {
-				S: aws.String(name),
+			"ConnectionId": {
+				S: aws.String(id),
 			},
 		},
 		TableName: aws.String(r.TableName),
@@ -59,6 +59,7 @@ func (r *DynamoDbRepository) GetConnections() (*[]Connection, error) {
 
 func newConnectionFor(itemMap map[string]*dynamodb.AttributeValue) *Connection {
 	return &Connection{
+		Id:          *itemMap["ConnectionId"].S,
 		Name:        *itemMap["ConnectionName"].S,
 		HostAndPort: itemStringValueFor(itemMap["HostAndPort"]),
 		Username:    itemStringValueFor(itemMap["Username"]),

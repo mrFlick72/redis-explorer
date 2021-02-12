@@ -6,6 +6,8 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/mrflick72/redis-explorer/src/api"
 	"github.com/mrflick72/redis-explorer/src/internal/connections"
+	"github.com/patrickmn/go-cache"
+	"time"
 )
 
 func dynamoDbClient() *dynamodb.DynamoDB {
@@ -15,6 +17,7 @@ func dynamoDbClient() *dynamodb.DynamoDB {
 }
 
 func ConfigureConnectionsRepository() *connections.Repository {
+	cache := cache.New(5*time.Minute, 10*time.Minute)
 
 	dynamoDbRepository := connections.Repository{
 		Repo: &connections.DynamoDbRepository{
@@ -24,7 +27,7 @@ func ConfigureConnectionsRepository() *connections.Repository {
 
 	cachedRepository := connections.InMemoryCachedRepository{
 		Delegate:     &dynamoDbRepository,
-		CacheManager: nil,
+		CacheManager: cache,
 		Ttl:          "1m",
 	}
 	return &connections.Repository{

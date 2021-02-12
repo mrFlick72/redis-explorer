@@ -27,13 +27,13 @@ func (r *InMemoryCachedRepository) StoreConnection(connection *Connection) error
 	return err
 }
 
-func (r *InMemoryCachedRepository) GetConnectionFor(name ConnectionName) (*Connection, error) {
-	element, found := r.CacheManager.Get(name)
+func (r *InMemoryCachedRepository) GetConnectionFor(id ConnectionId) (*Connection, error) {
+	element, found := r.CacheManager.Get(id)
 	if found {
 		connection := element.(Connection)
 		return &connection, nil
 	} else {
-		connection, err := repositoryFor(r).GetConnectionFor(name)
+		connection, err := repositoryFor(r).GetConnectionFor(id)
 		if err != nil {
 			return nil, err
 		}
