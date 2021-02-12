@@ -8,7 +8,7 @@ import (
 )
 
 type GoRedisRepository struct {
-	connectionsRepository connections.Repository
+	connectionsRepository *connections.Repository
 }
 
 func (repository *GoRedisRepository) ConnectTo(connectionName connections.ConnectionName) error {
