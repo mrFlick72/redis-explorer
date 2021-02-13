@@ -6,17 +6,13 @@ import (
 )
 
 type InMemoryCachedRepository struct {
-	Delegate     *Repository
+	Delegate     Repository
 	CacheManager *cache.Cache
 	Ttl          string
 }
 
-func repositoryFor(r *InMemoryCachedRepository) RepositoryOperations {
-	return r.Delegate.Operations
-}
-
 func (r *InMemoryCachedRepository) StoreConnection(connection *Connection) error {
-	err := repositoryFor(r).StoreConnection(connection)
+	err := r.Delegate.StoreConnection(connection)
 	if err != nil {
 		return err
 	}
@@ -33,7 +29,7 @@ func (r *InMemoryCachedRepository) GetConnectionFor(id ConnectionId) (*Connectio
 		connection := element.(Connection)
 		return &connection, nil
 	} else {
-		connection, err := repositoryFor(r).GetConnectionFor(id)
+		connection, err := r.Delegate.GetConnectionFor(id)
 		if err != nil {
 			return nil, err
 		}
@@ -46,5 +42,5 @@ func (r *InMemoryCachedRepository) GetConnectionFor(id ConnectionId) (*Connectio
 }
 
 func (r *InMemoryCachedRepository) GetConnections() (*[]Connection, error) {
-	return repositoryFor(r).GetConnections()
+	return r.Delegate.GetConnections()
 }

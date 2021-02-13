@@ -17,13 +17,13 @@ type GoRedisConnection struct {
 
 type GoRedisRepository struct {
 	storage               *cache.Cache
-	connectionsRepository *connections.Repository
+	connectionsRepository connections.Repository
 }
 
 func (repository *GoRedisRepository) ConnectTo(connectionId connections.ConnectionId) error {
 	found, _ := getCachedRedisConnection(connectionId, repository)
 	if !found {
-		connectionFor, err := repository.connectionsRepository.Operations.GetConnectionFor(connectionId)
+		connectionFor, err := repository.connectionsRepository.GetConnectionFor(connectionId)
 		if err == nil {
 			connectionContext := context.Background()
 

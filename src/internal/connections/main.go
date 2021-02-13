@@ -1,10 +1,6 @@
 package connections
 
-type Repository struct {
-	Operations RepositoryOperations
-}
-
-type RepositoryOperations interface {
+type Repository interface {
 	GetConnectionFor(id ConnectionId) (*Connection, error)
 	GetConnections() (*[]Connection, error)
 	StoreConnection(connection *Connection) error

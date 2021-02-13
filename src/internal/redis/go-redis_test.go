@@ -16,10 +16,9 @@ func TestGoRedisRepository_ConnectTo(t *testing.T) {
 	cache := cache.New(5*time.Minute, 10*time.Minute)
 
 	delegate := new(MockedDelegateObject)
-	delegateWrapper := connections.Repository{Operations: delegate}
 
 	repository := GoRedisRepository{
-		connectionsRepository: &delegateWrapper,
+		connectionsRepository: delegate,
 		storage:               cache,
 	}
 	expected := aConnection()
@@ -38,12 +37,11 @@ func TestGoRedisRepository_ConnectToShouldNotReplaceConnection(t *testing.T) {
 	storage := cache.New(5*time.Minute, 10*time.Minute)
 
 	delegate := new(MockedDelegateObject)
-	delegateWrapper := connections.Repository{Operations: delegate}
 	connection := aGoRedisConnection()
 	storage.Set("Test", &connection, cache.NoExpiration)
 
 	repository := GoRedisRepository{
-		connectionsRepository: &delegateWrapper,
+		connectionsRepository: delegate,
 		storage:               storage,
 	}
 
@@ -79,7 +77,7 @@ func TestGoRedisRepository_Save(t *testing.T) {
 	repository.storage.Set("Test", &connection, cache.NoExpiration)
 
 	_, err := repository.Save("Test", &Object{
-		content: map[string]string{"Value": "Value2"},
+		content: map[string]string{"Value": "Value"},
 		Id:      "key",
 		Ttl:     time.Minute * 5,
 	})
