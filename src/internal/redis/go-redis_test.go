@@ -35,7 +35,25 @@ func TestGoRedisRepository_ConnectTo(t *testing.T) {
 }
 
 func TestGoRedisRepository_ConnectToShouldNotReplaceConnection(t *testing.T) {
-	panic("TODO")
+	storage := cache.New(5*time.Minute, 10*time.Minute)
+
+	delegate := new(MockedDelegateObject)
+	delegateWrapper := connections.Repository{Operations: delegate}
+	connection := aGoRedisConnection()
+	storage.Set("Test", &connection, cache.NoExpiration)
+
+	repository := GoRedisRepository{
+		connectionsRepository: &delegateWrapper,
+		storage:               storage,
+	}
+
+	err := repository.ConnectTo("Test")
+
+	_, found := repository.storage.Get("Test")
+
+	assert.Nil(t, err)
+	assert.True(t, found)
+	delegate.AssertNotCalled(t, "GetConnectionFor", "Test")
 }
 
 func TestGoRedisRepository_Save(t *testing.T) {
@@ -58,10 +76,10 @@ func TestGoRedisRepository_Save(t *testing.T) {
 	}
 	fmt.Printf("&redisConnection: %v\n", &connection)
 
-	repository.storage.Set("Test", connection, cache.NoExpiration)
+	repository.storage.Set("Test", &connection, cache.NoExpiration)
 
 	_, err := repository.Save("Test", &Object{
-		content: map[string]string{"Value": "Value"},
+		content: map[string]string{"Value": "Value2"},
 		Id:      "key",
 		Ttl:     time.Minute * 5,
 	})
@@ -96,4 +114,19 @@ func aConnection() *connections.Connection {
 		Username:    "",
 		Password:    "",
 	}
+}
+
+func aGoRedisConnection() GoRedisConnection {
+	ctx := context.TODO()
+	client := go_redis.NewClient(&go_redis.Options{
+		Addr:     "localhost:6379",
+		Username: "", // no password set
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	connection := GoRedisConnection{
+		client: client,
+		cxt:    &ctx,
+	}
+	return connection
 }

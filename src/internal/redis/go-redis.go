@@ -21,31 +21,36 @@ type GoRedisRepository struct {
 }
 
 func (repository *GoRedisRepository) ConnectTo(connectionId connections.ConnectionId) error {
-	connectionFor, err := repository.connectionsRepository.Operations.GetConnectionFor(connectionId)
-	if err == nil {
-		connectionContext := context.Background()
+	found, _ := getCachedRedisConnection(connectionId, repository)
+	if !found {
+		connectionFor, err := repository.connectionsRepository.Operations.GetConnectionFor(connectionId)
+		if err == nil {
+			connectionContext := context.Background()
 
-		rdb := go_redis.NewClient(&go_redis.Options{
-			Addr:     connectionFor.HostAndPort,
-			Username: connectionFor.Username, // no password set
-			Password: connectionFor.Password, // no password set
-			DB:       0,                      // use default DB
-		})
-		repository.storage.Set(connectionId, GoRedisConnection{
-			client: rdb,
-			cxt:    &connectionContext,
-		}, cache.NoExpiration)
+			rdb := go_redis.NewClient(&go_redis.Options{
+				Addr:     connectionFor.HostAndPort,
+				Username: connectionFor.Username, // no password set
+				Password: connectionFor.Password, // no password set
+				DB:       0,                      // use default DB
+			})
+			repository.storage.Set(connectionId, GoRedisConnection{
+				client: rdb,
+				cxt:    &connectionContext,
+			}, cache.NoExpiration)
+		} else {
+			return err
+		}
 	}
-	return err
+
+	return nil
 }
 
 func (repository *GoRedisRepository) Save(connectionId connections.ConnectionId, object *Object) (*ObjectId, error) {
-	storedConnection, found := repository.storage.Get(connectionId)
-	redisConnection := storedConnection.(GoRedisConnection)
+	found, redisConnection := getCachedRedisConnection(connectionId, repository)
 	if found {
 		fmt.Printf("&redisConnection: %v\n", &redisConnection)
 		content, _ := json.Marshal(object.content)
-		client, context := redisClientFor(&redisConnection)
+		client, context := redisClientFor(redisConnection)
 		ttl := object.Ttl
 		set := client.Set(*context, object.Id, content, ttl)
 		fmt.Printf("&set: %v\n", set)
@@ -54,6 +59,15 @@ func (repository *GoRedisRepository) Save(connectionId connections.ConnectionId,
 	} else {
 		return nil, errors.New(fmt.Sprintf("connection %v not found", connectionId))
 	}
+}
+
+func getCachedRedisConnection(connectionId connections.ConnectionId, repository *GoRedisRepository) (bool, *GoRedisConnection) {
+	storedConnection, found := repository.storage.Get(connectionId)
+	if found {
+		redisConnection := storedConnection.(*GoRedisConnection)
+		return found, redisConnection
+	}
+	return found, nil
 }
 
 func redisClientFor(connection *GoRedisConnection) (*go_redis.Client, *context.Context) {
