@@ -1,8 +1,13 @@
 package redis
 
-import "github.com/mrflick72/redis-explorer/src/internal/connections"
+import (
+	"github.com/mrflick72/redis-explorer/src/internal/connections"
+	"time"
+)
 
-type DatabaseId int
+type Ttl = time.Duration
+
+type DatabaseId = int
 
 type Database struct {
 	Addr     string
@@ -17,9 +22,12 @@ type Page struct {
 	PageSize int
 }
 
+type ObjectId = string
+
 type Object struct {
 	content map[string]string
-	Id      string
+	Id      ObjectId
+	Ttl     Ttl
 }
 
 func (object *Object) ValueFor(key string) (string, error) {
@@ -30,13 +38,13 @@ type ObjetsId string
 
 type Repository interface {
 	ConnectTo(connectionId connections.ConnectionId) error
-	DisconnectFrom(connectionId connections.ConnectionId) error
+	//DisconnectFrom(connectionId connections.ConnectionId) error
 
-	GetDatabases(connectionId connections.ConnectionId) (*[]Database, error)
-	FlushAllDatabases(connectionId connections.ConnectionId) error
-	FlushDatabaseFor(connectionId connections.ConnectionId, id DatabaseId) error
+	//GetDatabases(connectionId connections.ConnectionId) (*[]Database, error)
+	//FlushAllDatabases(connectionId connections.ConnectionId) error
+	//FlushDatabaseFor(connectionId connections.ConnectionId, id DatabaseId) error
 
-	Save(connectionId connections.ConnectionId, object Object) error
-	GetObjectsFor(connectionId connections.ConnectionId, id DatabaseId, page int, pageSize int) (*[]Object, error)
-	DeleteObjectFor(connectionId connections.ConnectionId, id ObjetsId) (*Object, error)
+	Save(connectionId connections.ConnectionId, object *Object) (*ObjectId, error)
+	//GetObjectsFor(connectionId connections.ConnectionId, id DatabaseId, page int, pageSize int) (*[]Object, error)
+	//DeleteObjectFor(connectionId connections.ConnectionId, id ObjetsId) (*Object, error)
 }
