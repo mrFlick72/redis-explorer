@@ -80,8 +80,8 @@ func (mock *MockedDelegateObject) StoreConnection(connection *Connection) error 
 	return args.Error(0)
 }
 
-func (mock *MockedDelegateObject) GetConnectionFor(name ConnectionName) (*Connection, error) {
-	args := mock.Called(name)
+func (mock *MockedDelegateObject) GetConnectionFor(connectionId ConnectionId) (*Connection, error) {
+	args := mock.Called(connectionId)
 	return args.Get(0).(*Connection), args.Error(1)
 }
 

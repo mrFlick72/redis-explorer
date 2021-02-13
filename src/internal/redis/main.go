@@ -29,14 +29,14 @@ func (object *Object) ValueFor(key string) (string, error) {
 type ObjetsId string
 
 type Repository interface {
-	ConnectTo(connectionName connections.ConnectionName) error
-	DisconnectFrom(connectionName connections.ConnectionName) error
+	ConnectTo(connectionId connections.ConnectionId) error
+	DisconnectFrom(connectionId connections.ConnectionId) error
 
-	GetDatabases(connectionName connections.ConnectionName) (*[]Database, error)
-	FlushAllDatabases(connectionName connections.ConnectionName) error
-	FlushDatabaseFor(connectionName connections.ConnectionName, id DatabaseId) error
+	GetDatabases(connectionId connections.ConnectionId) (*[]Database, error)
+	FlushAllDatabases(connectionId connections.ConnectionId) error
+	FlushDatabaseFor(connectionId connections.ConnectionId, id DatabaseId) error
 
-	Save(connectionName connections.ConnectionName, object Object) error
-	GetObjectsFor(connectionName connections.ConnectionName, id DatabaseId, page int, pageSize int) (*[]Object, error)
-	DeleteObjectFor(connectionName connections.ConnectionName, id ObjetsId) (*Object, error)
+	Save(connectionId connections.ConnectionId, object Object) error
+	GetObjectsFor(connectionId connections.ConnectionId, id DatabaseId, page int, pageSize int) (*[]Object, error)
+	DeleteObjectFor(connectionId connections.ConnectionId, id ObjetsId) (*Object, error)
 }

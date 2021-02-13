@@ -5,38 +5,50 @@ import (
 	"fmt"
 	go_redis "github.com/go-redis/redis/v8"
 	"github.com/mrflick72/redis-explorer/src/internal/connections"
+	"github.com/patrickmn/go-cache"
 )
 
 type GoRedisRepository struct {
+	storage               *cache.Cache
 	connectionsRepository *connections.Repository
 }
 
-func (repository *GoRedisRepository) ConnectTo(connectionName connections.ConnectionName) error {
+func (repository *GoRedisRepository) ConnectTo(connectionId connections.ConnectionId) error {
+	connectionFor, err := repository.connectionsRepository.Operations.GetConnectionFor(connectionId)
+	if err == nil {
+		rdb := go_redis.NewClient(&go_redis.Options{
+			Addr:     connectionFor.HostAndPort,
+			Username: connectionFor.Username, // no password set
+			Password: connectionFor.Password, // no password set
+			DB:       0,                      // use default DB
+		})
+		repository.storage.Set(connectionId, rdb, cache.NoExpiration)
+	}
+	return err
+}
+
+func (repository *GoRedisRepository) DisconnectFrom(connectionId connections.ConnectionId) error {
 	panic("tobe defined")
 }
 
-func (repository *GoRedisRepository) DisconnectFrom(connectionName connections.ConnectionName) error {
+func (repository *GoRedisRepository) GetDatabases(connectionId connections.ConnectionId) (*[]Database, error) {
 	panic("tobe defined")
 }
 
-func (repository *GoRedisRepository) GetDatabases(connectionName connections.ConnectionName) (*[]Database, error) {
+func (repository *GoRedisRepository) FlushAllDatabases(connectionId connections.ConnectionId) error {
 	panic("tobe defined")
 }
 
-func (repository *GoRedisRepository) FlushAllDatabases(connectionName connections.ConnectionName) error {
+func (repository *GoRedisRepository) FlushDatabaseFor(connectionId connections.ConnectionId, id DatabaseId) error {
 	panic("tobe defined")
 }
-
-func (repository *GoRedisRepository) FlushDatabaseFor(connectionName connections.ConnectionName, id DatabaseId) error {
+func (repository *GoRedisRepository) Save(connectionId connections.ConnectionId, object Object) error {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) Save(connectionName connections.ConnectionName, object Object) error {
+func (repository *GoRedisRepository) GetObjectsFor(connectionId connections.ConnectionId, id DatabaseId, page int, pageSize int) (*[]Object, error) {
 	panic("tobe defined")
 }
-func (repository *GoRedisRepository) GetObjectsFor(connectionName connections.ConnectionName, id DatabaseId, page int, pageSize int) (*[]Object, error) {
-	panic("tobe defined")
-}
-func (repository *GoRedisRepository) DeleteObjectFor(connectionName connections.ConnectionName, id ObjetsId) (*Object, error) {
+func (repository *GoRedisRepository) DeleteObjectFor(connectionId connections.ConnectionId, id ObjetsId) (*Object, error) {
 	panic("tobe defined")
 }
 
