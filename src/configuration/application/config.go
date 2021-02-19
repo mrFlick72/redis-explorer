@@ -16,26 +16,23 @@ func dynamoDbClient() *dynamodb.DynamoDB {
 	})))
 }
 
-func ConfigureConnectionsRepository() *connections.Repository {
+func ConfigureConnectionsRepository() connections.Repository {
 	cache := cache.New(5*time.Minute, 10*time.Minute)
 
-	dynamoDbRepository := connections.Repository{
-		Operations: &connections.DynamoDbRepository{
-			TableName: "RedisExplorerConnections",
-			Client:    dynamoDbClient(),
-		}}
+	dynamoDbRepository := connections.DynamoDbRepository{
+		TableName: "RedisExplorerConnections",
+		Client:    dynamoDbClient(),
+	}
 
 	cachedRepository := connections.InMemoryCachedRepository{
 		Delegate:     &dynamoDbRepository,
 		CacheManager: cache,
 		Ttl:          "1m",
 	}
-	return &connections.Repository{
-		Operations: &cachedRepository,
-	}
+	return &cachedRepository
 }
 
-func ConfigureMessageEndpoints(repository *connections.Repository, app *iris.Application) {
-	endpoints := api.ConnectionEndpoints{Repo: repository}
+func ConfigureMessageEndpoints(repository connections.Repository, app *iris.Application) {
+	endpoints := api.ConnectionEndpoints{Repo: &repository}
 	endpoints.RegisterEndpoint(app)
 }
